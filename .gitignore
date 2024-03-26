@@ -1,0 +1,10 @@
+# Common
+.DS_Store
+
+# Css
+css/styles.css
+css/styles.map
+
+# Parcel
+dist/
+.parcel-cache/
