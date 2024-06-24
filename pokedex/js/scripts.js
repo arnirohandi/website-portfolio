@@ -18,12 +18,7 @@ let pokemonRepository = (function () {
   * @param {Pokemon} pokemon 
   */
   function addListItem(pokemon) {
-    let pokemonInfo = pokemon.name + " (height: " + pokemon.height + ")";
-
-    // Check if the height is above a certain value to highlight special Pokémon
-    if (pokemon.height > 10) {
-      pokemonInfo += " - Wow, that's big!";
-    }
+    let pokemonInfo = pokemon.name
 
     // Get ul node
     let pokemonList = document.querySelector('#pokemon-list');
@@ -99,6 +94,9 @@ let pokemonRepository = (function () {
       item.imageUrl = details.sprites.front_default;
       item.height = details.height;
       item.types = details.types;
+      item.skill = details.abilities.map(
+        (ability) => ability.ability.name
+      );
     }).catch(function (e) {
       console.error(e);
     });
@@ -113,8 +111,21 @@ let pokemonRepository = (function () {
     showModal(
       pokemon.name,
       pokemon.height,
-      pokemon.imageUrl
+      pokemon.imageUrl,
+      pokemon.skill
     );
+  }
+
+  function filterPokemons(searchTerm) {
+    let filteredPokemons = pokemonList.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Get ul node
+    let pokemonContainer = document.querySelector('#pokemon-list');
+    pokemonContainer.innerHTML = '';
+
+    filteredPokemons.forEach((pokemon) => addListItem(pokemon));
   }
 
   return {
@@ -122,7 +133,8 @@ let pokemonRepository = (function () {
     addListItem: addListItem,
     getAll: getAll,
     loadList: loadList,
-    loadDetails: loadDetails
+    loadDetails: loadDetails,
+    filterPokemons: filterPokemons
   };
 })();
 
@@ -131,8 +143,9 @@ let pokemonRepository = (function () {
 * @param {string} title Title of the modal
 * @param {string} text Content inside the modal
 * @param {string} imgUrl Link to picture of pokemon
+* @param {string} skill Ability of the Pokemon
 */
-function showModal(title, text, imgUrl) {
+function showModal(title, text, imgUrl, skill) {
 
   let modalBody = $(".modal-body");
   let modalTitle = $(".modal-title");
@@ -144,7 +157,7 @@ function showModal(title, text, imgUrl) {
   // Creating img in modal content
   let imageElementFront = $('<img class="modal-img" style="width:50%">');
   imageElementFront.attr("src", imgUrl);
-  let heightElement = $("<p>" + "Height : " + text + "</p>");
+  let heightElement = $("<p>" + "Height: " + text + "</p><p>Ability: " + skill + "</p>");
 
   modalTitle.append(nameElement);
   modalBody.append(imageElementFront);
@@ -160,16 +173,16 @@ function hideModal() {
 }
 
 pokemonRepository.loadList()
-.then(function () {
-  // Now the data is loaded!
-  pokemonRepository.getAll().forEach(function (pokemon) {
-    // Load the datails first, otherwise the pokemon only has name and url
-    pokemonRepository.loadDetails(pokemon)
-    .then(function () {
-      pokemonRepository.addListItem(pokemon);
+  .then(function () {
+    // Now the data is loaded!
+    pokemonRepository.getAll().forEach(function (pokemon) {
+      // Load the datails first, otherwise the pokemon only has name and url
+      pokemonRepository.loadDetails(pokemon)
+        .then(function () {
+          pokemonRepository.addListItem(pokemon);
+        });
     });
   });
-});
 
 // Listner for escape key
 window.addEventListener('keydown', (e) => {
@@ -177,4 +190,14 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && modalContainer.classList.contains('is-visible')) {
     hideModal();
   }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  document
+    .querySelector("#search-form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      let searchTerm = document.querySelector("#search-input").value;
+      pokemonRepository.filterPokemons(searchTerm);
+    });
 });

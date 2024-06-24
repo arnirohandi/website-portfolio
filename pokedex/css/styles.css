@@ -1,46 +1,30 @@
-/* CSS reset */
-html {
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
-  margin: 0;
-  padding: 0;
-  font-weight: normal;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
+.navbar-brand {
+  font-size: 40px;
 }
 
 .pokemon {
-  border: 2px solid #4CAF50; /* Green border */
+  border: 2px solid #4CAF50;
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 15px;
-  background-color: #f7f7f7; /* Light grey background */
+  background-color: #f7f7f7;
+  /* Light grey background */
 }
 
 .name {
   font-weight: bold;
-  color: #4CAF50; /* Dark grey text color */
-  display: inline; /* Display inline */
+  color: #4CAF50;
+  /* Dark grey text color */
+  display: inline;
+  /* Display inline */
 }
 
 .height {
   font-style: italic;
-  color: #666; /* Medium grey text color */
-  display: inline; /* Display inline */
+  color: #666;
+  /* Medium grey text color */
+  display: inline;
+  /* Display inline */
 }
 
 li {
@@ -74,25 +58,14 @@ ul.list-group {
   background: rgba(0, 0, 0, 0.5);
 
   /* to show it above other content */
-  z-index: 999; 
+  z-index: 999;
 
   /* to allow scrolling if the screen is not high enough*/
-  overflow: auto; 
+  overflow: auto;
 
   /* this is used to center the modal */
   display: grid;
   text-align: center;
-}
-
-.modal {
-  margin: auto;
-  display: inline-block;
-  box-sizing: border-box;
-  background: #fff;
-  padding: 15px;
-  width: 100%;
-  max-width: 700px;
-  text-align: left;
 }
 
 .modal-close {
@@ -110,3 +83,4 @@ ul.list-group {
 .modal p {
   margin-bottom: 0;
 }
+
